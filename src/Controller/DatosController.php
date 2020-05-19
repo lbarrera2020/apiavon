@@ -172,7 +172,39 @@ class DatosController extends AbstractFOSRestController
 
 // Retornando response
         return new JsonResponse(json_encode($array), JsonResponse::HTTP_OK, array(), true);
+    }
 
+    /**
+     * @Rest\Post("/insertProductosdetalle", name="insertProductosdetalle")
+     *
+     */
+    public function insertProducto(Request $request)
+    {
+        $em = $this->em;
+        $idpedidos             = $request->get('idpedidos');
+        $idproductos             = $request->get('idproductos');
+        $cantidad             = $request->get('cantidad');
+        $precio             = $request->get('precio');
+        $serializer = $this->serializer;
+        //$headers = $request->headers;
+        $conn = $em->getConnection();
+        $result = [];
+        $array =[];
 
+        $sql = "insert into detallepedido
+            (idpedidos,idproductos,cantidad,precio)
+            Values (:idpedidos,:idproductos,:cantidad,:precio)";
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->execute([
+            ':idpedidos' => $idpedidos,
+            ':idproductos' => $idproductos,
+            ':cantidad' => $cantidad,
+            ':precio' => $precio
+        ]);
+        $result = $stmt->fetchAll();
+        $array['array'] = $result;
+
+// Retornando response
+        return new JsonResponse(json_encode($array), JsonResponse::HTTP_OK, array(), true);
     }
 }
