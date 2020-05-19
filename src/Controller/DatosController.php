@@ -124,4 +124,30 @@ class DatosController extends AbstractFOSRestController
 
 
     }
+
+    /**
+     * @Rest\Get("/spinnercliente", name="spinnercliente")
+     *
+     */
+    public function getUsuariocliente(Request $request)
+    {
+        $em = $this->em;
+        $idtipo    = $request->get('idtipo');
+        $serializer = $this->serializer;
+        //$headers = $request->headers;
+        $conn = $em->getConnection();
+        $result = [];
+        $array =[];
+
+        $sql = "SELECT usuario as valor FROM usuario where idtipousuario= :idtipousuario order by nombre";
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->execute([':idtipousuario' => $idtipo]);
+        $result = $stmt->fetchAll();
+        $array['array'] = $result;
+
+// Retornando response
+        return new JsonResponse(json_encode($array), JsonResponse::HTTP_OK, array(), true);
+
+
+    }
 }
