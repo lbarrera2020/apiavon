@@ -55,16 +55,18 @@ class DatosController extends AbstractFOSRestController
         $headers = $request->headers;
         $conn = $em->getConnection();
         $result = [];
+        $array =[];
 
         $sql = "SELECT codigocampania as valor FROM campania where estado= :estado";
         $stmt = $conn->prepare($sql);
         $result = $stmt->execute([':estado' => 1]);
         $result = $stmt->fetchAll();
+        $array['array'] = $result;
 
 
 
 // Retornando response
-        return new JsonResponse(json_encode($result), JsonResponse::HTTP_OK, array(), true);
+        return new JsonResponse(json_encode($array), JsonResponse::HTTP_OK, array(), true);
 
 
     }
