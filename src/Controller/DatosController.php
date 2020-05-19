@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Campania;
 use App\Entity\Categorias;
 use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -18,6 +19,8 @@ use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\Security\Core\Security;
 use App\Service\JsonSchema;
 use JsonSchema\Validator;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class DatosController
@@ -32,35 +35,36 @@ class DatosController extends AbstractFOSRestController
     private $security;
     private $em;
 
-    public function __construct(SerializerInterface $serializer,EntityManagerInterface $em, KernelInterface $kernel, Connection $connection, Security $security)
+    public function __construct(SerializerInterface $serializer, EntityManagerInterface $em, KernelInterface $kernel, Connection $connection, Security $security)
     {
         $this->serializer = $serializer;
         $this->kernel = $kernel;
-        $this->em         = $em;
+        $this->em = $em;
         $this->connection = $connection;
         $this->security = $security;
     }
 
     /**
-     * @Rest\Get("/categorias", name="categorias")
+     * @Rest\Get("/campania", name="campania")
      *
      */
-    public function getLibros(Request $request)
+    public function getCampania(Request $request)
     {
-        // Inicialización de variables
         $em = $this->em;
         $serializer = $this->serializer;
-        $datos = '[]';
-        $result = $em->getRepository(Categorias::class)->findAll();
+        $headers = $request->headers;
+        $conn = $em->getConnection();
+        $result = [];
 
-        if ($result) {
-            // Convirtiendo el resultado de objetos a jsons
-            $datos = $serializer->serialize($result, 'json');
-        }
+        $sql = "SELECT codigocampania as valor FROM campania where estado= :estado";
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->execute([':estado' => 1]);
+        $result = $stmt->fetchAll();
+
 
 
 // Retornando response
-        return new JsonResponse($datos, JsonResponse::HTTP_OK, array(), true);
+        return new JsonResponse($result, JsonResponse::HTTP_OK, array(), true);
 
 
     }
