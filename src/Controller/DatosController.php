@@ -30,11 +30,13 @@ class DatosController extends AbstractFOSRestController
     private $kernel;
     private $connection;
     private $security;
+    private $em;
 
-    public function __construct(SerializerInterface $serializer, KernelInterface $kernel, Connection $connection, Security $security)
+    public function __construct(SerializerInterface $serializer,EntityManagerInterface $em, KernelInterface $kernel, Connection $connection, Security $security)
     {
         $this->serializer = $serializer;
         $this->kernel = $kernel;
+        $this->em         = $em;
         $this->connection = $connection;
         $this->security = $security;
     }
