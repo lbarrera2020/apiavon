@@ -40,7 +40,7 @@ class DatosController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Post("/categorias", name="categorias")
+     * @Rest\Get("/categorias", name="categorias")
      *
      */
     public function getLibros(Request $request)
