@@ -97,4 +97,31 @@ class DatosController extends AbstractFOSRestController
 
 
     }
+
+    /**
+     * @Rest\Get("/validarUsuario", name="validarUsuario")
+     *
+     */
+    public function getUsuario(Request $request)
+    {
+        $em = $this->em;
+        $usuario             = $request->get('usuario');
+        $clave             = $request->get('clave');
+        $serializer = $this->serializer;
+        //$headers = $request->headers;
+        $conn = $em->getConnection();
+        $result = [];
+        $array =[];
+
+        $sql = "SELECT * FROM usuario WHERE usuario= : usu_usuario AND clave= :usu_password";
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->execute([':usu_usuario' => $usuario,':usu_password' =>$clave]);
+        $result = $stmt->fetchAll();
+        $array['array'] = $result;
+
+// Retornando response
+        return new JsonResponse(json_encode($array), JsonResponse::HTTP_OK, array(), true);
+
+
+    }
 }
