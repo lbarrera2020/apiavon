@@ -225,6 +225,7 @@ class DatosController extends AbstractFOSRestController
     public function insertProducto(Request $request)
     {
         $em = $this->em;
+        //verificar las fechas
         $fechacrea             = date("Y-m-d");
         $mod_date = strtotime($fechacrea."+ 15 days");
         $usuario_add             = $request->get('usuario_add');
@@ -273,6 +274,30 @@ class DatosController extends AbstractFOSRestController
         ];
 // Retornando response
         return new JsonResponse(json_encode('ok'), JsonResponse::HTTP_CREATED, array(), true);
+    }
+
+    /**
+     * @Rest\Get("/idmaximopedidos", name="idmaximopedidos")
+     *
+     */
+    public function getIdmaximopedidos(Request $request)
+    {
+        $em = $this->em;
+        $serializer = $this->serializer;
+        //$headers = $request->headers;
+        $conn = $em->getConnection();
+        $result = [];
+        $array =[];
+
+        $sql = "select max(idpedidos) as id_ from pedidos";
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->execute();
+        $result = $stmt->fetchAll();
+        $array['array'] = $result;
+
+// Retornando response
+        return new JsonResponse(json_encode($array), JsonResponse::HTTP_OK, array(), true);
+
     }
 
 }
