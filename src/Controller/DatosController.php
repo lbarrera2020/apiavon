@@ -219,7 +219,7 @@ class DatosController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Post("/insertProductosdetalle", name="insertProductosdetalle")
+     * @Rest\Post("/insertProductos", name="insertProductos")
      *
      */
     public function insertProducto(Request $request)
