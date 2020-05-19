@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Campania;
 use App\Entity\Categorias;
 use App\Entity\Detallepedido;
+use App\Entity\Pedidos;
+use App\Entity\Productos;
 use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -187,12 +189,14 @@ class DatosController extends AbstractFOSRestController
         $cantidad             = $request->get('cantidad');
         $precio             = $request->get('precio');
         $serializer = $this->serializer;
+        $objProducto = $em->getRepository(Productos::class)->findOneBy(array('idproductos' => $idproductos));
+        $objPedido = $em->getRepository(Pedidos::class)->findOneBy(array('idpedidos' => $idpedidos));
         //$headers = $request->headers;
         $conn = $em->getConnection();
         try {
             $detalle = new Detallepedido();
-            $detalle->setIdpedidos($idpedidos);
-            $detalle->setIdproductos($idproductos);
+            $detalle->setIdpedidos($objPedido);
+            $detalle->setIdproductos($objProducto);
             $detalle->setCantidad($cantidad);
             $detalle->setPrecio($precio);
             $em->persist($detalle);
