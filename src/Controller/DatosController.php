@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Campania;
 use App\Entity\Categorias;
 use App\Entity\Detallepedido;
+use App\Entity\Formapago;
 use App\Entity\Pedidos;
 use App\Entity\Productos;
 use App\Entity\User;
+use App\Entity\Usuario;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -181,7 +183,7 @@ class DatosController extends AbstractFOSRestController
      * @Rest\Post("/insertProductosdetalle", name="insertProductosdetalle")
      *
      */
-    public function insertProducto(Request $request)
+    public function insertProductodeta(Request $request)
     {
         $em = $this->em;
         $idpedidos             = $request->get('idpedidos');
@@ -216,5 +218,61 @@ class DatosController extends AbstractFOSRestController
         return new JsonResponse(json_encode('ok'), JsonResponse::HTTP_CREATED, array(), true);
     }
 
+    /**
+     * @Rest\Post("/insertProductosdetalle", name="insertProductosdetalle")
+     *
+     */
+    public function insertProducto(Request $request)
+    {
+        $em = $this->em;
+        $fechacrea             = date("Y-m-d");
+        $mod_date = strtotime($fechacrea."+ 15 days");
+        $usuario_add             = $request->get('usuario_add');
+        $montopedido             = $request->get('montopedido');
+        $dui_cliente             = $request->get('dui_cliente');
+        $fecha_entrega             = date("Y-m-d",$mod_date)."\n";
+        $estado=1;
+        $pedidoscol=null;
+        $idcampania             = $request->get('idcampania');
+        $direccionentrega             = $request->get('direccionentrega');
+        $idformapago             = $request->get('idformapago');
+
+
+
+        $serializer = $this->serializer;
+        $objUsuarioAdd = $em->getRepository(Usuario::class)->findOneBy(array('idusuario' => $usuario_add));
+        $objCampania = $em->getRepository(Campania::class)->findOneBy(array('idcampania' => $idcampania));
+        $objFormaPago = $em->getRepository(Formapago::class)->findOneBy(array('idformapago' => $idformapago));
+        //$headers = $request->headers;
+        $conn = $em->getConnection();
+        try {
+            $detalle = new Pedidos();
+            $detalle->setFechacreacion($fechacrea);
+            $detalle->setUsuarioAdd($objUsuarioAdd);
+            $detalle->setMontopedido($montopedido);
+            $detalle->setDuiCliente($dui_cliente);
+            $detalle->setFechaEntrega($fecha_entrega);
+            $detalle->setEstado($estado);
+            $detalle->setPedidoscol($pedidoscol);
+            $detalle->setIdcampania($objCampania);
+            $detalle->setDireccionentrega($direccionentrega);
+            $detalle->setIdformapago($objFormaPago);
+
+            $em->persist($detalle);
+            $em->flush();
+        } catch (\Exception $ex) {
+// throw $ex;
+            return new JsonResponse('[ "Se ha producido un error interno" ]', JsonResponse::HTTP_INTERNAL_SERVER_ERROR, array(), true);
+
+        }
+        $response = [
+            "status" => true,
+            "code" => 200,
+            "message" => "creado",
+            "success" => true
+        ];
+// Retornando response
+        return new JsonResponse(json_encode('ok'), JsonResponse::HTTP_CREATED, array(), true);
+    }
 
 }
