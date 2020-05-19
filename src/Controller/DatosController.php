@@ -99,7 +99,7 @@ class DatosController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Get("/validarUsuario", name="validarUsuario")
+     * @Rest\Post("/validarUsuario", name="validarUsuario")
      *
      */
     public function getUsuario(Request $request)
@@ -107,6 +107,8 @@ class DatosController extends AbstractFOSRestController
         $em = $this->em;
         $usuario             = $request->get('usuario');
         $clave             = $request->get('clave');
+        var_dump($request->getContent());
+        var_dump($usuario);
         $serializer = $this->serializer;
         //$headers = $request->headers;
         $conn = $em->getConnection();
