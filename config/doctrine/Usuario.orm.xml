@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\Usuario" table="usuario">
+    <indexes>
+      <index name="fk_usuario_tipousuario1_idx" columns="idtipousuario"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="usuario_UNIQUE" columns="usuario"/>
+      <unique-constraint name="idusuario_UNIQUE" columns="idusuario"/>
+    </unique-constraints>
+    <id name="idusuario" type="integer" column="idusuario">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="nombre" type="string" column="nombre" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="usuario" type="string" column="usuario" length="10" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="clave" type="string" column="clave" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="correo" type="string" column="correo" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="telcel" type="string" column="telcel" length="9" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="telfijo" type="string" column="telfijo" length="9" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="fechacreacion" type="date" column="fechacreacion" nullable="true"/>
+    <field name="fechainicio" type="date" column="fechainicio" nullable="true"/>
+    <field name="estado" type="boolean" column="estado" nullable="true"/>
+    <field name="direccion1" type="string" column="direccion1" length="200" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="direccion2" type="string" column="direccion2" length="200" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <many-to-one field="idtipousuario" target-entity="Tipousuario" fetch="LAZY">
+      <join-columns>
+        <join-column name="idtipousuario" referenced-column-name="idtipousuario"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

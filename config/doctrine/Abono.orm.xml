@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\Abono" table="abono">
+    <indexes>
+      <index name="fk_abono_pedidos1_idx" columns="idpedidos"/>
+    </indexes>
+    <id name="idabono" type="integer" column="idabono">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="monto" type="float" column="monto" precision="10" scale="0" nullable="true"/>
+    <field name="fechaabono" type="date" column="fechaabono" nullable="true"/>
+    <many-to-one field="idpedidos" target-entity="Pedidos" fetch="LAZY">
+      <join-columns>
+        <join-column name="idpedidos" referenced-column-name="idpedidos"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

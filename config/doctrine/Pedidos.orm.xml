@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\Pedidos" table="pedidos">
+    <indexes>
+      <index name="fk_pedidos_formapago1_idx" columns="idformapago"/>
+      <index name="fk_pedidos_campania1_idx" columns="idcampania"/>
+    </indexes>
+    <id name="idpedidos" type="integer" column="idpedidos">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="fechacreacion" type="date" column="fechacreacion" nullable="true"/>
+    <field name="usuarioAdd" type="string" column="usuario_add" length="10" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="montopedido" type="float" column="montopedido" precision="10" scale="0" nullable="true"/>
+    <field name="duiCliente" type="string" column="dui_cliente" length="10" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="fechaEntrega" type="date" column="fecha_entrega" nullable="true"/>
+    <field name="estado" type="integer" column="estado" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="pedidoscol" type="string" column="pedidoscol" length="45" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="direccionentrega" type="string" column="direccionentrega" length="200" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <many-to-one field="idcampania" target-entity="Campania" fetch="LAZY">
+      <join-columns>
+        <join-column name="idcampania" referenced-column-name="idcampania"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="idformapago" target-entity="Formapago" fetch="LAZY">
+      <join-columns>
+        <join-column name="idformapago" referenced-column-name="idformapago"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>
