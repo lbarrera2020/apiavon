@@ -113,7 +113,7 @@ class DatosController extends AbstractFOSRestController
         $result = [];
         $array =[];
 
-        $sql = "SELECT * FROM usuario WHERE usuario= : usu_usuario AND clave= :usu_password";
+        $sql = "SELECT * FROM usuario WHERE usuario= :usu_usuario AND clave= :usu_password";
         $stmt = $conn->prepare($sql);
         $result = $stmt->execute([':usu_usuario' => $usuario,':usu_password' =>$clave]);
         $result = $stmt->fetchAll();
