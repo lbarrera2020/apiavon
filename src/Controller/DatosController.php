@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Campania;
 use App\Entity\Categorias;
+use App\Entity\Detallepedido;
 use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -188,23 +189,28 @@ class DatosController extends AbstractFOSRestController
         $serializer = $this->serializer;
         //$headers = $request->headers;
         $conn = $em->getConnection();
-        $result = [];
-        $array =[];
+        try {
+            $detalle = new Detallepedido();
+            $detalle->setIdpedidos($idpedidos);
+            $detalle->setIdproductos($idproductos);
+            $detalle->setCantidad($cantidad);
+            $detalle->setPrecio($precio);
+            $em->persist($detalle);
+            $em->flush();
+        } catch (\Exception $ex) {
+// throw $ex;
+            return new JsonResponse('[ "Se ha producido un error interno" ]', JsonResponse::HTTP_INTERNAL_SERVER_ERROR, array(), true);
 
-        $sql = "insert into detallepedido
-            (idpedidos,idproductos,cantidad,precio)
-            Values (:idpedidos,:idproductos,:cantidad,:precio)";
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->execute([
-            ':idpedidos' => $idpedidos,
-            ':idproductos' => $idproductos,
-            ':cantidad' => $cantidad,
-            ':precio' => $precio
-        ]);
-        $result = $stmt->fetchAll();
-        $array['array'] = $result;
-
+        }
+        $response = [
+            "status" => true,
+            "code" => 200,
+            "message" => "creado",
+            "success" => true
+        ];
 // Retornando response
-        return new JsonResponse(json_encode($array), JsonResponse::HTTP_OK, array(), true);
+        return new JsonResponse(json_encode('ok'), JsonResponse::HTTP_CREATED, array(), true);
     }
+
+
 }
