@@ -63,7 +63,34 @@ class DatosController extends AbstractFOSRestController
         $result = $stmt->fetchAll();
         $array['array'] = $result;
 
+// Retornando response
+        return new JsonResponse(json_encode($array), JsonResponse::HTTP_OK, array(), true);
 
+
+    }
+
+    /**
+     * @Rest\Get("/spinnerProductos", name="spinnerProductos")
+     *
+     */
+    public function getProductos(Request $request)
+    {
+        $em = $this->em;
+        $serializer = $this->serializer;
+        //$headers = $request->headers;
+        $conn = $em->getConnection();
+        $result = [];
+        $array =[];
+
+        $sql = "select idproductos,concat(a.descripcion,'   Precio: ','        $',a.precio) as descripcion, precio
+        from productos as a inner join categorias as b on a.categorias=b.idcategorias
+        inner join tipo_campania as c on b.idcategorias=c.categorias
+        inner join campania as d on c.idtipo_campania=tipo_campania
+        where a.estado=1 and codigocampania= :codigocampania";
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->execute([':codigocampania' => 'CODIGO1']);
+        $result = $stmt->fetchAll();
+        $array['array'] = $result;
 
 // Retornando response
         return new JsonResponse(json_encode($array), JsonResponse::HTTP_OK, array(), true);
