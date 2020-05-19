@@ -148,6 +148,31 @@ class DatosController extends AbstractFOSRestController
 // Retornando response
         return new JsonResponse(json_encode($array), JsonResponse::HTTP_OK, array(), true);
 
+    }
+
+    /**
+     * @Rest\Post("/obtenerdirecciones", name="obtenerdirecciones")
+     *
+     */
+    public function getDirecciones(Request $request)
+    {
+        $em = $this->em;
+        $usuario             = $request->get('usuario');
+        $serializer = $this->serializer;
+        //$headers = $request->headers;
+        $conn = $em->getConnection();
+        $result = [];
+        $array =[];
+
+        $sql = "SELECT direccion1,direccion2 FROM usuario where usuario= :usuario";
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->execute([':usuario' => $usuario]);
+        $result = $stmt->fetchAll();
+        $array['array'] = $result;
+
+// Retornando response
+        return new JsonResponse(json_encode($array), JsonResponse::HTTP_OK, array(), true);
+
 
     }
 }
