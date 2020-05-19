@@ -64,7 +64,7 @@ class DatosController extends AbstractFOSRestController
 
 
 // Retornando response
-        return new JsonResponse($result, JsonResponse::HTTP_OK, array(), true);
+        return new JsonResponse(json_encode($result), JsonResponse::HTTP_OK, array(), true);
 
 
     }
