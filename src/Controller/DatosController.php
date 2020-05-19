@@ -45,14 +45,14 @@ class DatosController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Get("/campania", name="campania")
+     * @Rest\Get("/spinnercanpania", name="spinnercanpania")
      *
      */
     public function getCampania(Request $request)
     {
         $em = $this->em;
         $serializer = $this->serializer;
-        $headers = $request->headers;
+        //$headers = $request->headers;
         $conn = $em->getConnection();
         $result = [];
         $array =[];
