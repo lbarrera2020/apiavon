@@ -230,7 +230,7 @@ class DatosController extends AbstractFOSRestController
         $usuario_add             = $request->get('usuario_add');
         $montopedido             = $request->get('montopedido');
         $dui_cliente             = $request->get('dui_cliente');
-        $fecha_entrega             = date("Y-m-d",$mod_date)."\n";
+        $fecha_entrega             = date("Y-m-d",$mod_date);
         $estado=1;
         $pedidoscol=null;
         $idcampania             = $request->get('idcampania');
